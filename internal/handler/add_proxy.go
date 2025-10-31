@@ -6,7 +6,7 @@ import (
 
 	"github.com/d1manpro/nginx-proxy-api/internal/certbot"
 	"github.com/d1manpro/nginx-proxy-api/internal/config"
-	"github.com/d1manpro/nginx-proxy-api/nginx"
+	"github.com/d1manpro/nginx-proxy-api/internal/nginx"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
