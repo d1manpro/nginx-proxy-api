@@ -49,12 +49,12 @@ func AddProxy(cfg *config.Config, log *zap.Logger) func(c *gin.Context) {
 			return
 		}
 
-		c.JSON(http.StatusCreated, gin.H{"status": "created successfully"})
+		c.JSON(http.StatusCreated, gin.H{"status": "created"})
 	}
 }
 
 func isDomainValid(domain string) bool {
-	re := regexp.MustCompile(`^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?){1,2}$`)
+	re := regexp.MustCompile(`^(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)*[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$`)
 	return re.MatchString(domain)
 }
 

@@ -75,6 +75,7 @@ func NewServer(cfg *config.Config, log *zap.Logger) *Server {
 func (s *Server) Start() {
 	s.router.GET("/test")
 	s.router.POST("/add-proxy", handler.AddProxy(s.cfg, s.log))
+	s.router.POST("/remove-proxy", handler.RemoveProxy(s.cfg, s.log))
 
 	port := ":" + s.cfg.Server.Port
 
