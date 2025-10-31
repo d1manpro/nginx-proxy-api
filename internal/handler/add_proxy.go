@@ -44,8 +44,8 @@ func AddProxy(cfg *config.Config, log *zap.Logger) func(c *gin.Context) {
 
 		err = nginx.AddConfig(req.Domain, req.Target, cfg.NginxCfgTemplate, nginxCfgPath)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to write nginx config"})
-			log.Error("failed to write nginx config", zap.String("domain", req.Domain), zap.Error(err))
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to setup nginx config"})
+			log.Error("failed to setup nginx config", zap.String("domain", req.Domain), zap.Error(err))
 			return
 		}
 

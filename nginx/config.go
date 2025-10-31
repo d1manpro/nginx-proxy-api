@@ -17,7 +17,7 @@ func AddConfig(domain, target, tmplStr, fileName string) error {
 		return fmt.Errorf("failed to parse template: %w", err)
 	}
 
-	file, err := os.Create("/etc/nginx/sites-available" + fileName)
+	file, err := os.Create("/etc/nginx/sites-available/" + fileName)
 	if err != nil {
 		return fmt.Errorf("failed to create file: %w", err)
 	}
@@ -32,7 +32,7 @@ func AddConfig(domain, target, tmplStr, fileName string) error {
 		return fmt.Errorf("failed to generate config: %w", err)
 	}
 
-	return reloadNginx()
+	return activateSite(fileName)
 }
 
 func RemoveConfig(fileName string) error {
