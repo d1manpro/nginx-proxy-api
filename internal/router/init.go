@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/d1manpro/nginx-proxy-api/internal/config"
+	"github.com/d1manpro/nginx-proxy-api/internal/handler"
 	"github.com/gin-contrib/cors"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
@@ -41,6 +42,22 @@ func NewServer(cfg *config.Config, log *zap.Logger) *Server {
 		c.Next()
 	})
 
+	/*r.Use(func(c *gin.Context) {
+		authHeader := c.GetHeader("Authorization")
+		if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
+			c.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+
+		token := strings.TrimPrefix(authHeader, "Bearer ")
+		if token != cfg.Access.Token {
+			c.AbortWithStatus(http.StatusForbidden)
+			return
+		}
+
+		c.Next()
+	})*/
+
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     cfg.Server.Origins,
 		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
@@ -57,6 +74,7 @@ func NewServer(cfg *config.Config, log *zap.Logger) *Server {
 
 func (s *Server) Start() {
 	s.router.GET("/test")
+	s.router.POST("/add-proxy", handler.AddProxy(s.cfg, s.log))
 
 	port := ":" + s.cfg.Server.Port
 

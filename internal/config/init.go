@@ -7,9 +7,11 @@ import (
 )
 
 type Config struct {
-	Server    ServerConfig `yaml:"http_server"`
-	Access    AccessConfig `yaml:"access"`
-	DebugMode bool         `yaml:"debug_mode"`
+	Server           ServerConfig `yaml:"http_server"`
+	Access           AccessConfig `yaml:"access"`
+	Email            string       `yaml:"email"`
+	NginxCfgTemplate string
+	DebugMode        bool `yaml:"debug_mode"`
 }
 
 type ServerConfig struct {
@@ -33,6 +35,12 @@ func Load() (*Config, error) {
 	if err := yaml.Unmarshal(data, &cfg); err != nil {
 		return nil, err
 	}
+
+	text, err := os.ReadFile("template.conf")
+	if err != nil {
+		return nil, err
+	}
+	cfg.NginxCfgTemplate = string(text)
 
 	return &cfg, nil
 }
