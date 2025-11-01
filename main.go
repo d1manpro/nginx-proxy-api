@@ -50,7 +50,7 @@ func setupLogger() *zap.Logger {
 	var cores []zapcore.Core
 	cores = append(cores, consoleCore)
 
-	logFile, err := os.OpenFile("pter-api.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+	logFile, err := os.OpenFile("npa.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
 		panic(fmt.Sprintf("cannot open log file: %v", err))
 	}

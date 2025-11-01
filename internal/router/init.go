@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"slices"
+	"strings"
 	"time"
 
 	"github.com/d1manpro/nginx-proxy-api/internal/config"
@@ -42,7 +43,7 @@ func NewServer(cfg *config.Config, log *zap.Logger) *Server {
 		c.Next()
 	})
 
-	/*r.Use(func(c *gin.Context) {
+	r.Use(func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
 			c.AbortWithStatus(http.StatusUnauthorized)
@@ -56,7 +57,7 @@ func NewServer(cfg *config.Config, log *zap.Logger) *Server {
 		}
 
 		c.Next()
-	})*/
+	})
 
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     cfg.Server.Origins,
