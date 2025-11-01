@@ -6,11 +6,6 @@ import (
 	"os"
 )
 
-type tmplConfig struct {
-	Domain string
-	Target string
-}
-
 func AddConfig(domain, target, tmplStr, fileName string) error {
 	tmpl, err := template.New("nginx").Parse(tmplStr)
 	if err != nil {

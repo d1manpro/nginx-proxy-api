@@ -7,9 +7,6 @@ import (
 )
 
 func activateSite(fileName string) error {
-	sitesAvailable := "/etc/nginx/sites-available/"
-	sitesEnabled := "/etc/nginx/sites-enabled/"
-
 	src := filepath.Join(sitesAvailable, fileName)
 	dst := filepath.Join(sitesEnabled, fileName)
 
