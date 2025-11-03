@@ -79,7 +79,7 @@ func NewServer(cfg *config.Config, log *zap.Logger, cfAPI *cloudflare.CfAPI) *Se
 func (s *Server) Start() {
 	s.router.GET("/test")
 	s.router.POST("/add-proxy", handler.AddProxy(s.cfg, s.log, s.cfAPI))
-	s.router.POST("/remove-proxy", handler.RemoveProxy(s.cfg, s.log))
+	s.router.POST("/remove-proxy", handler.RemoveProxy(s.cfg, s.log, s.cfAPI))
 
 	port := ":" + s.cfg.Server.Port
 

@@ -5,13 +5,14 @@ import (
 	"strings"
 
 	"github.com/d1manpro/nginx-proxy-api/internal/certbot"
+	"github.com/d1manpro/nginx-proxy-api/internal/cloudflare"
 	"github.com/d1manpro/nginx-proxy-api/internal/config"
 	"github.com/d1manpro/nginx-proxy-api/internal/nginx"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
-func RemoveProxy(cfg *config.Config, log *zap.Logger) func(c *gin.Context) {
+func RemoveProxy(cfg *config.Config, log *zap.Logger, cf *cloudflare.CfAPI) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		var req RemoveDomainReq
 		if err := c.ShouldBindJSON(&req); err != nil {
@@ -44,7 +45,15 @@ func RemoveProxy(cfg *config.Config, log *zap.Logger) func(c *gin.Context) {
 				zoneID = v
 			}
 		}
-		if zoneID == "" {
+
+		if zoneID != "" {
+			err := cf.DeleteDNSRecord(zoneID, req.Domain)
+			if err != nil {
+				c.JSON(http.StatusNoContent, gin.H{"status": "deleted"})
+				log.Error("failed to delete cloudflare record", zap.String("domain", req.Domain), zap.Error(err))
+				return
+			}
+		} else {
 			err = certbot.DeleteCert(req.Domain)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "certbot error"})
