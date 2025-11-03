@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func AddConfig(domain, target, tmplStr, fileName string) error {
+func AddConfig(domain, certDomain, target, tmplStr, fileName string) error {
 	tmpl, err := template.New("nginx").Parse(tmplStr)
 	if err != nil {
 		return fmt.Errorf("failed to parse template: %w", err)
@@ -19,8 +19,9 @@ func AddConfig(domain, target, tmplStr, fileName string) error {
 	defer file.Close()
 
 	cfg := tmplConfig{
-		Domain: domain,
-		Target: target,
+		Domain:     domain,
+		CertDomain: certDomain,
+		Target:     target,
 	}
 
 	if err := tmpl.Execute(file, cfg); err != nil {

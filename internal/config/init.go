@@ -9,6 +9,7 @@ import (
 type Config struct {
 	Server           ServerConfig `yaml:"http_server"`
 	Access           AccessConfig `yaml:"access"`
+	Cloudflare       Cloudflare   `yaml:"cloudflare"`
 	Email            string       `yaml:"email"`
 	NginxCfgTemplate string
 	DebugMode        bool `yaml:"debug_mode"`
@@ -23,6 +24,12 @@ type ServerConfig struct {
 type AccessConfig struct {
 	Token      string   `yaml:"token"`
 	AllowedIPs []string `yaml:"allowed_ips"`
+}
+
+type Cloudflare struct {
+	Token   string            `yaml:"token"`
+	NodeIP  string            `yaml:"node_ip"`
+	Domains map[string]string `yaml:"domains"`
 }
 
 func Load() (*Config, error) {

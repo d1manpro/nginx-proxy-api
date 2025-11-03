@@ -6,6 +6,7 @@ var (
 )
 
 type tmplConfig struct {
-	Domain string
-	Target string
+	Domain     string
+	CertDomain string
+	Target     string
 }

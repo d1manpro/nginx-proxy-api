@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/d1manpro/nginx-proxy-api/internal/cloudflare"
 	"github.com/d1manpro/nginx-proxy-api/internal/config"
 	"github.com/d1manpro/nginx-proxy-api/internal/handler"
 	"github.com/gin-contrib/cors"
@@ -18,11 +19,12 @@ import (
 type Server struct {
 	router *gin.Engine
 	srv    *http.Server
+	cfAPI  *cloudflare.CfAPI
 	cfg    *config.Config
 	log    *zap.Logger
 }
 
-func NewServer(cfg *config.Config, log *zap.Logger) *Server {
+func NewServer(cfg *config.Config, log *zap.Logger, cfAPI *cloudflare.CfAPI) *Server {
 	if !cfg.DebugMode {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -69,13 +71,14 @@ func NewServer(cfg *config.Config, log *zap.Logger) *Server {
 	return &Server{
 		router: r,
 		cfg:    cfg,
+		cfAPI:  cfAPI,
 		log:    log,
 	}
 }
 
 func (s *Server) Start() {
 	s.router.GET("/test")
-	s.router.POST("/add-proxy", handler.AddProxy(s.cfg, s.log))
+	s.router.POST("/add-proxy", handler.AddProxy(s.cfg, s.log, s.cfAPI))
 	s.router.POST("/remove-proxy", handler.RemoveProxy(s.cfg, s.log))
 
 	port := ":" + s.cfg.Server.Port

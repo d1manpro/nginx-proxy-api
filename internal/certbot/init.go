@@ -1,8 +1,10 @@
 package certbot
 
 import (
+	"bytes"
 	"fmt"
 	"os/exec"
+	"strings"
 )
 
 func GetCert(domain, email string) error {
@@ -31,4 +33,17 @@ func DeleteCert(domain string) error {
 	}
 
 	return nil
+}
+
+func IsCertExists(domain string) (bool, error) {
+	cmd := exec.Command("certbot", "certificates")
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	cmd.Stderr = &out
+
+	if err := cmd.Run(); err != nil {
+		return false, fmt.Errorf("ошибка выполнения certbot: %v\n%s", err, out.String())
+	}
+
+	return strings.Contains(out.String(), domain), nil
 }

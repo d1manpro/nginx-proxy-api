@@ -6,6 +6,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/d1manpro/nginx-proxy-api/internal/cloudflare"
 	"github.com/d1manpro/nginx-proxy-api/internal/config"
 	"github.com/d1manpro/nginx-proxy-api/internal/router"
 	"go.uber.org/zap"
@@ -22,7 +23,9 @@ func main() {
 		log.Fatal("failed to load config", zap.Error(err))
 	}
 
-	server := router.NewServer(cfg, log)
+	cfAPI := cloudflare.InitCfAPI(cfg, log)
+
+	server := router.NewServer(cfg, log, cfAPI)
 	server.Start()
 
 	stop := make(chan os.Signal, 1)

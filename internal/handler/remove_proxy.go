@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/d1manpro/nginx-proxy-api/internal/certbot"
 	"github.com/d1manpro/nginx-proxy-api/internal/config"
@@ -37,11 +38,19 @@ func RemoveProxy(cfg *config.Config, log *zap.Logger) func(c *gin.Context) {
 			return
 		}
 
-		err = certbot.DeleteCert(req.Domain)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "certbot error"})
-			log.Error("failed to get certificate", zap.String("domain", req.Domain), zap.Error(err))
-			return
+		var zoneID string
+		for k, v := range cfg.Cloudflare.Domains {
+			if strings.HasSuffix(req.Domain, k) {
+				zoneID = v
+			}
+		}
+		if zoneID == "" {
+			err = certbot.DeleteCert(req.Domain)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "certbot error"})
+				log.Error("failed to get certificate", zap.String("domain", req.Domain), zap.Error(err))
+				return
+			}
 		}
 
 		c.JSON(http.StatusNoContent, gin.H{"status": "deleted"})

@@ -34,3 +34,4 @@ go.work.sum
 config.yml
 *.log
 nginx-proxy-api
+.yamllint
