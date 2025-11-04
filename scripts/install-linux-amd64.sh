@@ -2,7 +2,7 @@
 set -euo pipefail
 
 SERVICE_NAME="npapi"
-BIN_URL="https://github.com/d1manpro/nginx-proxy-api/releases/latest/download/npa-linux-amd64"
+BIN_URL="https://github.com/d1manpro/nginx-proxy-api/releases/download/v1.0.0/npa-linux-amd64"
 BIN_PATH="/usr/local/bin/${SERVICE_NAME}"
 CONFIG_DIR="/etc/${SERVICE_NAME}"
 SYSTEMD_UNIT="/etc/systemd/system/${SERVICE_NAME}.service"
