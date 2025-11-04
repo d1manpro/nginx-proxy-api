@@ -33,5 +33,6 @@ go.work.sum
 
 config.yml
 *.log
+npa*
 nginx-proxy-api
 .yamllint

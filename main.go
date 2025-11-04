@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -47,18 +46,5 @@ func setupLogger() *zap.Logger {
 		EncodeLevel: zapcore.CapitalLevelEncoder,
 	}
 
-	encoder := zapcore.NewConsoleEncoder(encoderCfg)
-	consoleCore := zapcore.NewCore(encoder, zapcore.AddSync(os.Stdout), zapcore.InfoLevel)
-
-	var cores []zapcore.Core
-	cores = append(cores, consoleCore)
-
-	logFile, err := os.OpenFile("npa.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
-	if err != nil {
-		panic(fmt.Sprintf("cannot open log file: %v", err))
-	}
-	fileCore := zapcore.NewCore(encoder, zapcore.AddSync(logFile), zapcore.InfoLevel)
-	cores = append(cores, fileCore)
-
-	return zap.New(zapcore.NewTee(cores...))
+	return zap.New(zapcore.NewTee(zapcore.NewCore(zapcore.NewConsoleEncoder(encoderCfg), zapcore.AddSync(os.Stdout), zapcore.InfoLevel)))
 }

@@ -1,6 +1,8 @@
 package config
 
 import (
+	"errors"
+	"fmt"
 	"os"
 
 	"gopkg.in/yaml.v2"
@@ -33,7 +35,17 @@ type Cloudflare struct {
 }
 
 func Load() (*Config, error) {
-	data, err := os.ReadFile("config.yml")
+	cfgPath := os.Getenv("NPA_CONFIG")
+	if cfgPath == "" {
+		cfgPath = "config.yml"
+	}
+
+	tmplPath := os.Getenv("NPA_TEMPLATE")
+	if tmplPath == "" {
+		tmplPath = "template.conf"
+	}
+
+	data, err := os.ReadFile(cfgPath)
 	if err != nil {
 		return nil, err
 	}
@@ -43,11 +55,18 @@ func Load() (*Config, error) {
 		return nil, err
 	}
 
-	text, err := os.ReadFile("template.conf")
+	text, err := os.ReadFile(tmplPath)
 	if err != nil {
 		return nil, err
 	}
 	cfg.NginxCfgTemplate = string(text)
+
+	if cfg.Cloudflare.Token == "your_cloudflare_api_token" || cfg.Cloudflare.NodeIP == "0.0.0.0" {
+		return nil, fmt.Errorf("You need to configure Cloudflare API in %s", cfgPath)
+	}
+	if cfg.Email == "admin@example.com" {
+		return nil, errors.New("You need to edit email")
+	}
 
 	return &cfg, nil
 }
