@@ -35,7 +35,7 @@ We provide a convenient installer script that automates binary download, configu
 > ⚠️ Warning! Read the configuration and template setup below before running the installer.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/d1manpro/nginx-proxy-api/main/install.sh | sudo bash
+curl -fsSL https://raw.githubusercontent.com/d1manpro/nginx-proxy-api/refs/heads/main/scripts/install-linux-amd64.sh | sudo bash
 ````
 
 The installer will:
