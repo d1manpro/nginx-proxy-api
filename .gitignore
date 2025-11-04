@@ -36,3 +36,4 @@ config.yml
 npa*
 nginx-proxy-api
 .yamllint
+template.conf
