@@ -62,6 +62,6 @@ func RemoveProxy(cfg *config.Config, log *zap.Logger, cf *cloudflare.CfAPI) func
 			}
 		}
 
-		c.JSON(http.StatusNoContent, gin.H{"status": "deleted"})
+		c.Status(http.StatusNoContent)
 	}
 }

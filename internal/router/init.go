@@ -63,7 +63,7 @@ func NewServer(cfg *config.Config, log *zap.Logger, cfAPI *cloudflare.CfAPI) *Se
 
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     cfg.Server.Origins,
-		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
+		AllowMethods:     []string{"GET", "POST", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		AllowCredentials: false,
 	}))
@@ -78,8 +78,8 @@ func NewServer(cfg *config.Config, log *zap.Logger, cfAPI *cloudflare.CfAPI) *Se
 
 func (s *Server) Start() {
 	s.router.GET("/test")
-	s.router.POST("/add-proxy", handler.AddProxy(s.cfg, s.log, s.cfAPI))
-	s.router.POST("/remove-proxy", handler.RemoveProxy(s.cfg, s.log, s.cfAPI))
+	s.router.POST("/proxy", handler.AddProxy(s.cfg, s.log, s.cfAPI))
+	s.router.DELETE("/proxy", handler.RemoveProxy(s.cfg, s.log, s.cfAPI))
 
 	port := ":" + s.cfg.Server.Port
 

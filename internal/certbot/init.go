@@ -36,13 +36,13 @@ func DeleteCert(domain string) error {
 }
 
 func IsCertExists(domain string) (bool, error) {
-	cmd := exec.Command("certbot", "certificates")
+	cmd := exec.Command( "certbot", "certificates")
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	cmd.Stderr = &out
 
 	if err := cmd.Run(); err != nil {
-		return false, fmt.Errorf("ошибка выполнения certbot: %v\n%s", err, out.String())
+		return false, fmt.Errorf("certbot get-cert-list error: %v\n%s", err, out.String())
 	}
 
 	return strings.Contains(out.String(), domain), nil
