@@ -105,7 +105,7 @@ StandardOutput=append:${LOG_FILE}
 StandardError=append:${LOG_FILE}
 
 NoNewPrivileges=true
-ProtectSystem=full
+ProtectSystem=no
 ProtectHome=true
 PrivateTmp=true
 LimitNOFILE=65535
