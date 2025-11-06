@@ -101,8 +101,8 @@ Saves logs into `/var/log/npapi.log`
 
 | Method | Path            | Description         | Auth Required |
 | ------ | --------------- | ------------------- | ------------- |
-| POST   | `/proxy`        | Add proxy config    | ✅            |
-| DELETE | `/proxy`        | Remove proxy config | ✅            |
+| POST   | `/proxy`    | Add proxy config    | ✅            |
+| DELETE   | `/proxy` | Remove proxy config | ✅            |
 | GET    | `/test`         | Health check        | ✅            |
 
 ---
