@@ -89,7 +89,7 @@ func (c *CfAPI) CreateDNSRecord(zoneID string, data any) error {
 	}
 
 	for _, errObj := range cfResp.Errors {
-		if errObj.Code == 81057 {
+		if errObj.Code == 81058 {
 			return ErrRecordExists
 		}
 	}
