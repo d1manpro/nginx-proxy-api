@@ -9,7 +9,8 @@ import (
 
 func GetCert(domain, email string) error {
 	cmd := exec.Command("certbot", "certonly",
-		"--nginx",
+		"--webroot",
+		"-w", "/var/www/letsencrypt",
 		"-d", domain,
 		"--agree-tos",
 		"--non-interactive",
@@ -36,7 +37,7 @@ func DeleteCert(domain string) error {
 }
 
 func IsCertExists(domain string) (bool, error) {
-	cmd := exec.Command( "certbot", "certificates")
+	cmd := exec.Command("certbot", "certificates")
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	cmd.Stderr = &out

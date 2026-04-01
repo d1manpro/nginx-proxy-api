@@ -85,6 +85,38 @@ fi
 touch "${LOG_FILE}"
 chmod 644 "${LOG_FILE}"
 
+echo "[*] Setting up default Nginx dirs for ACME..."
+NGINX_ACME_DIR="/var/www/letsencrypt"
+mkdir -p "${NGINX_ACME_DIR}"
+chown -R www-data:www-data "${NGINX_ACME_DIR}"
+chmod -R 755 "${NGINX_ACME_DIR}"
+
+ACME_CONF="/etc/nginx/conf.d/acme.conf"
+if [[ ! -f "${ACME_CONF}" ]]; then
+  echo "  -> Creating default ACME nginx config at ${ACME_CONF}"
+  cat > "${ACME_CONF}" <<'EOF'
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    server_name _;
+
+    root /var/www/letsencrypt;
+
+    location /.well-known/acme-challenge/ {
+        allow all;
+    }
+
+    location / {
+        return 404;
+    }
+}
+EOF
+fi
+
+echo "[*] Testing nginx config..."
+nginx -t && systemctl reload nginx
+
 echo "[*] Creating systemd service..."
 cat > "${SYSTEMD_UNIT}" <<EOF
 [Unit]
