@@ -71,9 +71,9 @@ func AddProxy(cfg *config.Config, log *zap.Logger, cf *cloudflare.CfAPI) func(c 
 			}
 
 			err = cf.CreateDNSRecord(zoneID, map[string]any{
-				"type":    "A",
+				"type":    cfg.Cloudflare.Type,
 				"name":    subdomain,
-				"content": cfg.Cloudflare.NodeIP,
+				"content": cfg.Cloudflare.NodeAddress,
 				"ttl":     1,
 				"proxied": true,
 			})

@@ -21,6 +21,7 @@ func main() {
 	if err != nil {
 		log.Fatal("failed to load config", zap.Error(err))
 	}
+	log.Info("Cloudflare records data", zap.String("type", cfg.Cloudflare.Type), zap.String("address", cfg.Cloudflare.NodeAddress))
 
 	cfAPI := cloudflare.InitCfAPI(cfg, log)
 

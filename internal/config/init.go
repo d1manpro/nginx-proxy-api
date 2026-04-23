@@ -3,10 +3,14 @@ package config
 import (
 	"errors"
 	"fmt"
+	"net"
 	"os"
+	"regexp"
 
 	"gopkg.in/yaml.v2"
 )
+
+var domainRegex = regexp.MustCompile(`^(?i)[a-z0-9-]+(\.[a-z0-9-]+)+$`)
 
 type Config struct {
 	Server           ServerConfig `yaml:"http_server"`
@@ -29,9 +33,10 @@ type AccessConfig struct {
 }
 
 type Cloudflare struct {
-	Token   string            `yaml:"token"`
-	NodeIP  string            `yaml:"node_ip"`
-	Domains map[string]string `yaml:"domains"`
+	Token       string `yaml:"token"`
+	Type        string
+	NodeAddress string            `yaml:"node_address"`
+	Domains     map[string]string `yaml:"domains"`
 }
 
 func Load() (*Config, error) {
@@ -61,11 +66,21 @@ func Load() (*Config, error) {
 	}
 	cfg.NginxCfgTemplate = string(text)
 
-	if cfg.Cloudflare.Token == "your_cloudflare_api_token" || cfg.Cloudflare.NodeIP == "0.0.0.0" {
+	if cfg.Cloudflare.Token == "your_cloudflare_api_token" || cfg.Cloudflare.NodeAddress == "0.0.0.0" {
 		return nil, fmt.Errorf("You need to configure Cloudflare API in %s", cfgPath)
 	}
+
 	if cfg.Email == "admin@example.com" {
 		return nil, errors.New("You need to edit email")
+	}
+
+	if net.ParseIP(cfg.Cloudflare.NodeAddress) != nil {
+		cfg.Cloudflare.Type = "A"
+	} else {
+		if ok := domainRegex.MatchString(cfg.Cloudflare.NodeAddress); !ok {
+			return nil, fmt.Errorf("node_address is not valid IPv4 or domain: %s", cfg.Cloudflare.NodeAddress)
+		}
+		cfg.Cloudflare.Type = "CNAME"
 	}
 
 	return &cfg, nil

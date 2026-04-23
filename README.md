@@ -8,7 +8,9 @@ It allows automatic provisioning of HTTPS proxying for subdomains or custom doma
 ## 🚀 Features
 
 - **Add new proxy**
-  - Creates `A` DNS record in Cloudflare pointing to your node IP  
+  - Creates DNS record in Cloudflare:
+    - `A` record if `node_address` is an IP
+    - `CNAME` record if `node_address` is a domain
   - Verifies or issues SSL certificates via `certbot`
   - Generates and enables Nginx site configuration
   - Reloads Nginx automatically
@@ -58,7 +60,9 @@ After installation, the service will start automatically.
 After installation, edit `/etc/npapi/config.yml` to set:
 
 * `cloudflare.token` — your Cloudflare API token
-* `cloudflare.node_ip` — the IP address for new DNS records
+* `cloudflare.node_address` — address for new DNS records:
+  - if IP (e.g. `1.2.3.4`) → creates an `A` record
+  - if domain (e.g. `node.example.com`) → creates a `CNAME` record
 * `cloudflare.domains` — map of domain names to Cloudflare zone IDs
 * `email` — your Lets Encrypt email address for CertBot
 
