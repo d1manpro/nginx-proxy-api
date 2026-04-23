@@ -112,7 +112,7 @@ Saves logs into `/var/log/npapi.log`
 **Add proxy**
 
 ```bash
-curl -X POST https://api.example.com/add-proxy \
+curl -X POST https://api.example.com/proxy \
   -H "Authorization: Bearer your_api_token" \
   -d '{"domain": "sub.example.com", "target": "node.example.com:8800"}'
 ```
@@ -120,7 +120,7 @@ curl -X POST https://api.example.com/add-proxy \
 **Remove proxy**
 
 ```bash
-curl -X POST https://api.example.com/remove-proxy \
+curl -X DELETE https://api.example.com/proxy \
   -H "Authorization: Bearer your_api_token" \
   -d '{"domain": "sub.example.com"}'
 ```
