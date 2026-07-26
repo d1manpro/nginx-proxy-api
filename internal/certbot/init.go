@@ -29,7 +29,7 @@ func DeleteCert(domain string) error {
 		"--non-interactive",
 	)
 	output, err := cmd.CombinedOutput()
-	if err != nil {
+	if err != nil && !strings.Contains(string(output), "No certificate found with name") {
 		return fmt.Errorf("certbot delete error: %w, output: %s", err, output)
 	}
 
